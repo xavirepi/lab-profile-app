@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const SALT_WORK_FACTOR = 10;
 
-const userSchema = mongoose.Shcema({
+const userSchema = mongoose.Schema({
 	username: {
 		unique: true,
 		type: String,
@@ -17,10 +17,12 @@ const userSchema = mongoose.Shcema({
 	  },
 	campus: {
 		type: [String],
+		required: 'Campus is required',
 		enum: ['Madrid', 'Barcelona', 'Miami', 'Paris', 'Berlin', 'Amsterdam', 'México', 'Sao Paulo', 'Lisbon']
 	  },
 	course: {
 		type: [String],
+		required: 'Course is required',
 		enum: ['Web Dev', 'UX/UI', 'Data Analytics', 'Cibersecurity']
 	  },
 	image: {
@@ -50,7 +52,8 @@ const userSchema = mongoose.Shcema({
 			return ret
 		}
 	}
-})
+}
+)
 
 // Password hash
 userSchema.pre('save', function(next){
