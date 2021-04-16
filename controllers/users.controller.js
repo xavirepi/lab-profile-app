@@ -54,7 +54,9 @@ module.exports.edit = (req, res, next) => {
 }
 
 module.exports.logout = (req, res, next) => {
-	
+	if(!currentUser) {
+		res.send('Logged Out')
+	}
 }
 
 module.exports.loggedin = (req, res, next) => {
