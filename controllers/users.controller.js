@@ -50,14 +50,41 @@ module.exports.upload = (req, res, next) => {
 }
 
 module.exports.edit = (req, res, next) => {
+	console.log('req.body edit', req.body)
+	console.log('req.body.id', req.body.id)
 
+	//req.body.id = req.currentUser;
+
+	console.log('req.currentUser', req.currentUser)
+
+	User.findOne({'_id': req.currentUser})
+		.then(user => {
+			console.log('user', user)
+			if(!user) {
+				next(createError(404));
+				return;
+			}
+			// A bit redundant since the route is protected
+			// if(user.toString() !== req.currentUser.toString()) {
+			// 	next(createError(403));
+			// 	return;
+			// }
+
+			Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
+				user[key] = value;
+			});
+
+			return user.save().then(() => res.json({}));
+		})
+		.catch(next);
 }
 
-module.exports.logout = (req, res, next) => {
-	if(!currentUser) {
-		res.send('Logged Out')
-	}
-}
+// Logout handled from the frontEnd
+// module.exports.logout = (req, res, next) => {
+// 	if(!currentUser) {
+// 		res.send('Logged Out')
+// 	}
+// }
 
 module.exports.loggedin = (req, res, next) => {
 	User.findById(req.currentUser)
